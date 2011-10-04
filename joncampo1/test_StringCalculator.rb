@@ -8,6 +8,18 @@
 
 require "test/unit"
 
+
+class StringCalculator
+  
+  def add(string_of_numbers)
+    listOfNumbers = ListOfNumbers.new string_of_numbers
+    listOfNumbers.check_negatives
+    listOfNumbers.sum
+  end
+  
+end
+
+
 class ListOfNumbers
  
   def initialize (line)
@@ -22,7 +34,7 @@ class ListOfNumbers
     @list_of_numbers.each do |n|
       sum += n
     end
-    return sum
+    sum
   end
 
   def check_negatives
@@ -45,17 +57,7 @@ class ListOfNumbers
   
 end
 
-
-class StringCalculator
-  
-  def add(string_of_numbers)
-    listOfNumbers = ListOfNumbers.new string_of_numbers
-    listOfNumbers.check_negatives
-    return listOfNumbers.sum
-  end
-  
-end
-
+# testing
 
 class TestStringCalculator < Test::Unit::TestCase
   
