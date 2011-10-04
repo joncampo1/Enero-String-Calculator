@@ -2,65 +2,73 @@
 # katayunos 2011.09.24 Donostia
 #
 # Kata:     StringCalculator, sólo hasta el punto 5 :), reescrita a métodos de 5 sentencias, según sugerencia de @programania ;)
+# => , puestos metodos privados y publicos, y refactorizado a otra clase las operaciones con lista_de_numeros.
 # Language: Ruby 1.9.2
 # Author:   @joncampo1 (twitter)
 
 require "test/unit"
 
-class StringCalculator
-  
-  def list_negatives_add(list_of_negatives, n)
-    if n < 0
-        list_of_negatives.push(n)
-    end
-    return list_of_negatives
-  end
-  
-  def list_negatives_get(list)
-    list_negatives = []
-    list.each do |n|
-      nn = n.to_i
-      list_negatives = list_negatives_add(list_negatives, nn)
-    end
-    return list_negatives
-  end
-  
-  def list_of_numbers_parse(numbers)
-    delimiter = ","
-    if numbers.match(%r!^\/\/!)
-      delimiter = numbers[2]
-      numbers = numbers[4..numbers.length]
-    end
-    list_of_numbers = numbers.split(%r!#{delimiter[0]}|\n!)  
-  end
+class ListOfNumbers
  
-  def numbers_parse(list)
-    list_negatives = list_negatives_get(list)
+  public
+  def initialize (line)
+    @list_of_numbers = []
+    unless line.empty?
+      @list_of_numbers = parse(line)
+    end
+  end
+  
+  public
+  def empty?
+    return @list_of_numbers == []
+  end
+  
+  public
+  def sum
+    sum = 0
+    @list_of_numbers.each do |n|
+      sum += n
+    end
+    return sum
+  end
+
+  public
+  def check_negatives
+    list_negatives = @list_of_numbers.find_all{|i| i < 0}
     unless list_negatives.empty?
       raise ArgumentError, "negatives not allowed: #{list_negatives}"
     end
   end
- 
-  def list_sum(list)
-    sum = 0
-    list.each do |n|
-      sum += n.to_i
+  
+  private
+  def parse(line)
+    delimiter = ","
+    if line.match(%r!^\/\/!)
+      delimiter = line[2]
+      line = line[4..line.length]
     end
-    return sum
-  end
- 
-  def add(numbers)
-    return 0 if numbers.empty?
-    list_of_numbers = list_of_numbers_parse(numbers)
-    numbers_parse(list_of_numbers)   
-    sum = list_sum(list_of_numbers)
-    return sum
-  end
+    list_of_numbers_strings = line.split(%r!#{delimiter[0]}|\n!)
+    @list_of_numbers = list_of_numbers_strings.map {|i| i.to_i()} 
+  end    
+  
+end
 
+
+class StringCalculator
+  
+  public
+  def add(string_of_numbers)
+    listOfNumbers = ListOfNumbers.new string_of_numbers
+    return 0 if listOfNumbers.empty?
+    listOfNumbers.check_negatives
+    return listOfNumbers.sum
+  end
+  
 end
 
 
 class TestStringCalculator < Test::Unit::TestCase
+  
   def setup
     @stringCalculator = StringCalculator.new
   end
@@ -93,5 +101,6 @@ class TestStringCalculator < Test::Unit::TestCase
     e = assert_raise (ArgumentError){@stringCalculator.add("///\n-1/-3/-5/6")}
     assert_equal("negatives not allowed: [-1, -3, -5]", e.message)
   end
+  
 end
   
