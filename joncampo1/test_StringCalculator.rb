@@ -19,11 +19,6 @@ class ListOfNumbers
   end
   
   public
-  def empty?
-    return @list_of_numbers == []
-  end
-  
-  public
   def sum
     sum = 0
     @list_of_numbers.each do |n|
@@ -59,7 +54,6 @@ class StringCalculator
   public
   def add(string_of_numbers)
     listOfNumbers = ListOfNumbers.new string_of_numbers
-    return 0 if listOfNumbers.empty?
     listOfNumbers.check_negatives
     return listOfNumbers.sum
   end
