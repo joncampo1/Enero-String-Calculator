@@ -10,15 +10,14 @@ require "test/unit"
 
 class ListOfNumbers
  
-  public
+ 
   def initialize (line)
     @list_of_numbers = []
     unless line.empty?
       @list_of_numbers = parse(line)
     end
   end
-  
-  public
+ 
   def sum
     sum = 0
     @list_of_numbers.each do |n|
@@ -27,7 +26,7 @@ class ListOfNumbers
     return sum
   end
 
-  public
+
   def check_negatives
     list_negatives = @list_of_numbers.find_all{|i| i < 0}
     unless list_negatives.empty?
@@ -51,7 +50,7 @@ end
 
 class StringCalculator
   
-  public
+
   def add(string_of_numbers)
     listOfNumbers = ListOfNumbers.new string_of_numbers
     listOfNumbers.check_negatives
